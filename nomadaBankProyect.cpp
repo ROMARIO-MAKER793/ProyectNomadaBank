@@ -1,5 +1,10 @@
 #include <iostream>
+#include <string>
+#include <limits>
 using namespace std;
+
+void titulo ();
+void continuarPrograma ();
 
 int main() {
 
@@ -10,18 +15,20 @@ int main() {
     int contador = 0;     
 
     do {
-        cout << "\nBienvenido a Nómada Bank" << endl;
+        titulo();
+        cout << "\nBienvenido a Nómada Bank" <<endl<<endl;
         cout << "1. Consultar saldo" << endl;
         cout << "2. Retirar dinero" << endl;
         cout << "3. Depositar dinero" << endl;
         cout << "4. Ver historial" << endl; // +1
         cout << "5. Salir" << endl;
-        cout << "Opcion: ";
+        cout <<endl<< "Digite una Opción: ";
         cin >> opcion;
 
         switch(opcion) {
             case 1:
                 cout << "\nSu saldo es: $" << saldo << endl;
+                continuarPrograma();
                 break;
 
             case 2:
@@ -37,6 +44,7 @@ int main() {
                 } else {
                     cout << "Error: monto invalido o insuficiente." << endl;
                 }
+                continuarPrograma();
                 break;
 
             case 3:
@@ -52,6 +60,7 @@ int main() {
                 } else {
                     cout << "Error: no se permiten montos negativos." << endl;
                 }
+                continuarPrograma();
                 break;
 
             case 4:
@@ -67,6 +76,7 @@ int main() {
                         }
                     }
                 }
+                continuarPrograma();
                 break;
 
             case 5:
@@ -81,4 +91,28 @@ int main() {
 
 
     return 0;
+}
+
+void titulo () {
+    system ("clear");
+    cout << "========================================================================================================"<<endl;
+    const char* logo = R"(
+        ███╗   ██╗ ██████╗ ███╗   ███╗ █████╗ ██████╗  █████╗     ██████╗  █████╗ ███╗   ██╗██╗  ██╗
+        ████╗  ██║██╔═══██╗████╗ ████║██╔══██╗██╔══██╗██╔══██╗    ██╔══██╗██╔══██╗████╗  ██║██║ ██╔╝
+        ██╔██╗ ██║██║   ██║██╔████╔██║███████║██║  ██║███████║    ██████╔╝███████║██╔██╗ ██║█████╔╝ 
+        ██║╚██╗██║██║   ██║██║╚██╔╝██║██╔══██║██║  ██║██╔══██║    ██╔══██╗██╔══██║██║╚██╗██║██╔═██╗ 
+        ██║ ╚████║╚██████╔╝██║ ╚═╝ ██║██║  ██║██████╔╝██║  ██║    ██████╔╝██║  ██║██║ ╚████║██║  ██╗
+        ╚═╝  ╚═══╝ ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
+    )";
+
+    cout << logo <<endl;
+    cout << "========================================================================================================"<<endl;
+
+}
+
+void continuarPrograma ()
+{
+    cout<<endl<<"Presione la tecla ENTER para continuar... ";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cin.get();
 }
