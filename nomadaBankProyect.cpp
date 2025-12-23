@@ -5,14 +5,26 @@ using namespace std;
 
 void titulo ();
 void continuarPrograma ();
+void retirarDinero (int montoRetirar, int &saldoActual);
+
 
 int main() {
 
-    float saldo = 1000;   
+    int saldo = 0;   
     int opcion = 0.0;
-    float monto =0.0;
-    float historial[10];  
-    int contador = 0;     
+    int monto =0.0;
+    int historial[10];  
+    int contador = 0;  
+    
+    titulo ();
+    cout << "Dinero disponible en cajero: ";
+    cin >> saldo;
+
+    while (saldo % 10 != 0) {
+        cout <<"Cantidad inválida, debe ser multiplo de 10"<<endl;
+        cout << "Dinero disponible en cajero: ";
+        cin >> saldo;
+    }
 
     do {
         titulo();
@@ -27,23 +39,23 @@ int main() {
 
         switch(opcion) {
             case 1:
-                cout << "\nSu saldo es: $" << saldo << endl;
+                cout << "\nSu saldo es: S/." << saldo << endl;
                 continuarPrograma();
                 break;
 
             case 2:
                 cout << "\nMonto a retirar: ";
                 cin >> monto;
-                if (monto > 0 && monto <= saldo) {
-                    saldo = saldo - monto;
-                    cout << "Retiro exitoso. Nuevo saldo: $" << saldo << endl;
-                    if (contador < 10) {
-                        historial[contador] = -monto; // negativo = retiro
-                        contador++;
-                    }
-                } else {
-                    cout << "Error: monto invalido o insuficiente." << endl;
+                while (saldo % 10 != 0) {
+                    cout <<"Cantidad inválida, debe ser multiplo de 10"<<endl;
+                    cout << "Monto a retirar: ";
+                    cin >> monto;
                 }
+                retirarDinero(monto, saldo);
+                if (contador < 10) {
+                historial[contador] = -monto; // negativo = retiro
+                contador++;
+                }            
                 continuarPrograma();
                 break;
 
@@ -52,7 +64,7 @@ int main() {
                 cin >> monto;
                 if (monto > 0) {
                     saldo = saldo + monto;
-                    cout << "Deposito exitoso. Nuevo saldo: $" << saldo << endl;
+                    cout << "Deposito exitoso. Nuevo saldo: S/." << saldo << endl;
                     if (contador < 10) {
                         historial[contador] = monto; 
                         contador++;
@@ -70,9 +82,9 @@ int main() {
                 } else {
                     for (int i = 0; i < contador; i++) {
                         if (historial[i] > 0) {
-                            cout << "Deposito: $" << historial[i] << endl;
+                            cout << "Deposito: S/." << historial[i] << endl;
                         } else {
-                            cout << "Retiro: $" << -historial[i] << endl;
+                            cout << "Retiro: S/." << -historial[i] << endl;
                         }
                     }
                 }
@@ -80,7 +92,7 @@ int main() {
                 break;
 
             case 5:
-                cout << "Gracias por usar el cajero. Vuelve Pronto" << endl;
+                cout << "Gracias por usar el cajero. Vuelve Pronto" << endl<<endl;
                 break;
 
             default:
@@ -115,4 +127,13 @@ void continuarPrograma ()
     cout<<endl<<"Presione la tecla ENTER para continuar... ";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cin.get();
+}
+
+void retirarDinero (int montoRetirar, int &saldoActual) {
+    if (montoRetirar > 0 && montoRetirar <= saldoActual) {
+        saldoActual = saldoActual - montoRetirar;
+        cout << "Retiro exitoso. Nuevo saldo: S/." << saldoActual << endl;   
+    } else {
+        cout << "Error: monto invalido o insuficiente." << endl;
+    }
 }
