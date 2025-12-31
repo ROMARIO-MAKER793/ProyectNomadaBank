@@ -1,0 +1,15 @@
+# Ignorar ejecutables comunes
+a.out
+mi_programa
+
+# Ignorar cualquier archivo sin extensión (opcional)
+*.[!c]*
+
+# Ignorar objetos y binarios
+*.o
+*.exe
+*.out
+
+# Mantener código fuente
+!*.cpp
+!*.h
