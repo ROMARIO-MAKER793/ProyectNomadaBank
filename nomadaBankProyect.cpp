@@ -1,34 +1,38 @@
 #include <iostream>
 #include <string>
 #include <limits>
+#include <thread>
+#include <chrono>
 using namespace std;
 
 void titulo ();
 void continuarPrograma ();
-void retirarDinero (int montoRetirar, int &saldoActual);
+void retirarDinero (int montoRetirar, float &saldoActual);
+void depositarDinero (int montoDepositar, float &saldoActual);
+void movimientos (int contador, int historial[]);
 
 
 int main() {
 
-    int saldo = 0;   
-    int opcion = 0.0;
+    float saldo = 0.0;   
+    int opcion = 0;
     int monto =0.0;
     int historial[10];  
     int contador = 0;  
     
     titulo ();
-    cout << "Dinero disponible en cajero: ";
+    cout << "Saldo en cuenta Bancaria: ";
     cin >> saldo;
 
-    while (saldo % 10 != 0) {
-        cout <<"Cantidad inválida, debe ser multiplo de 10"<<endl;
-        cout << "Dinero disponible en cajero: ";
+    while (saldo < 0) {
+        cout <<"Cantidad inválida!!"<<endl;
+        cout << "Digite el saldo en cuenta Bancaria: ";
         cin >> saldo;
     }
 
     do {
         titulo();
-        cout << "\nBienvenido a Nómada Bank" <<endl<<endl;
+        //cout << "\nBienvenido a Nómada Bank" <<endl<<endl;
         cout << "1. Consultar saldo" << endl;
         cout << "2. Retirar dinero" << endl;
         cout << "3. Depositar dinero" << endl;
@@ -39,14 +43,16 @@ int main() {
 
         switch(opcion) {
             case 1:
+                titulo();
                 cout << "\nSu saldo es: S/." << saldo << endl;
                 continuarPrograma();
                 break;
 
             case 2:
+                titulo();
                 cout << "\nMonto a retirar: ";
                 cin >> monto;
-                while (saldo % 10 != 0) {
+                while (monto % 10 != 0) {
                     cout <<"Cantidad inválida, debe ser multiplo de 10"<<endl;
                     cout << "Monto a retirar: ";
                     cin >> monto;
@@ -60,39 +66,37 @@ int main() {
                 break;
 
             case 3:
+                titulo();
                 cout <<"\nMonto a depositar: ";
                 cin >> monto;
-                if (monto > 0) {
-                    saldo = saldo + monto;
-                    cout << "Deposito exitoso. Nuevo saldo: S/." << saldo << endl;
-                    if (contador < 10) {
-                        historial[contador] = monto; 
-                        contador++;
-                    }
-                } else {
-                    cout << "Error: no se permiten montos negativos." << endl;
+                while (monto % 10 != 0) {
+                    cout <<"Cantidad inválida, debe ser multiplo de 10"<<endl;
+                    cout << "Monto a depositar: ";
+                    cin >> monto;
                 }
+                depositarDinero (monto, saldo);
+                if (contador < 10) {
+                    historial[contador] = monto; 
+                    contador++;
+                }                
                 continuarPrograma();
                 break;
 
             case 4:
-                cout << "\nHistorial de operaciones:" << endl;
-                if (contador == 0) {
-                    cout << "No hay operaciones registradas." << endl;
-                } else {
-                    for (int i = 0; i < contador; i++) {
-                        if (historial[i] > 0) {
-                            cout << "Deposito: S/." << historial[i] << endl;
-                        } else {
-                            cout << "Retiro: S/." << -historial[i] << endl;
-                        }
-                    }
-                }
+                titulo();
+                movimientos(contador, historial);
                 continuarPrograma();
                 break;
 
             case 5:
-                cout << "Gracias por usar el cajero. Vuelve Pronto" << endl<<endl;
+                titulo();
+                cout <<endl<< "Gracias por usar el cajero. Vuelve Pronto" << endl;
+                cout<<endl<<"--------------------------"<<endl;
+                for(int i = 3; i >= 0; i--) {
+                    this_thread::sleep_for(chrono::seconds(1));
+                    cout <<"\rSaliendo en "<< i <<" "<< flush; // flush asegura que se impriman los numeros al instante
+                }
+                cout<<endl<<endl;
                 break;
 
             default:
@@ -124,16 +128,47 @@ void titulo () {
 
 void continuarPrograma ()
 {
-    cout<<endl<<"Presione la tecla ENTER para continuar... ";
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    cin.get();
+    cout<<endl<<"--------------------------"<<endl;
+    for(int i = 5; i >= 0; i--) {
+        this_thread::sleep_for(chrono::seconds(1));
+        cout <<"\rContinuando en "<< i <<" "<< flush; // flush asegura que se impriman los numeros al instante
+    }
+    //cout<<endl<<"Presione la tecla ENTER para continuar ";
+    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    //cin.get();
+
+
 }
 
-void retirarDinero (int montoRetirar, int &saldoActual) {
+void retirarDinero (int montoRetirar, float &saldoActual) {
     if (montoRetirar > 0 && montoRetirar <= saldoActual) {
         saldoActual = saldoActual - montoRetirar;
         cout << "Retiro exitoso. Nuevo saldo: S/." << saldoActual << endl;   
     } else {
         cout << "Error: monto invalido o insuficiente." << endl;
+    }
+}
+
+void depositarDinero (int montoDepositar, float &saldoActual) {
+    if (montoDepositar > 0) {
+        saldoActual = saldoActual + montoDepositar;
+        cout << "Deposito exitoso. Nuevo saldo: S/." << saldoActual << endl;     
+    } else {
+        cout << "Error: no se permiten montos negativos." << endl;
+    }
+}
+
+void movimientos (int contador, int historial[]) {
+    cout << "\nHistorial de operaciones:" << endl;
+    if (contador == 0) {
+        cout << "No hay operaciones registradas." << endl;
+    } else {
+        for (int i = 0; i < contador; i++) {
+            if (historial[i] > 0) {
+                cout << "Deposito: S/." << historial[i] << endl;
+            } else {
+                cout << "Retiro: S/." << -historial[i] << endl;
+            }
+        }
     }
 }
